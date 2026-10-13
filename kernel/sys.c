@@ -1247,6 +1247,7 @@ SYSCALL_DEFINE1(newuname, struct new_utsname __user *, name)
 
 	down_read(&uts_sem);
 	memcpy(&tmp, utsname(), sizeof(tmp));
+#ifdef CONFIG_ANDROID_BPF_FAKE_UNAME
 	if (!strncmp(current->comm, "bpfloader", 9) ||
 	    !strncmp(current->comm, "netbpfload", 10) ||
 	    !strncmp(current->comm, "netd", 4)) {
@@ -1254,6 +1255,7 @@ SYSCALL_DEFINE1(newuname, struct new_utsname __user *, name)
 		pr_debug("fake uname: %s/%d release=%s\n",
 			 current->comm, current->pid, tmp.release);
 	}
+#endif
 #ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
 	susfs_spoof_uname(&tmp);
 #endif

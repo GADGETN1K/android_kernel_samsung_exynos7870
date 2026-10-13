@@ -1420,6 +1420,18 @@ config CC_OPTIMIZE_FOR_SIZE
 
 	  If unsure, say N.
 
+config ANDROID_BPF_FAKE_UNAME
+	bool "Report a 5.4 kernel release to bpfloader/netd"
+	depends on BPF_SYSCALL
+	default y
+	help
+	  Make uname() return "5.4.295" for bpfloader, netbpfload and netd,
+	  so that Android 12+ userspace accepts the backported eBPF support
+	  on this 3.18 kernel (Android 12+ refuses kernels older than 4.9).
+
+	  Android 11 (LineageOS 18.1) still supports 3.18 kernels natively
+	  through xt_qtaguid; say N there so netd uses the legacy path.
+
 config SYSCTL
 	bool
 
